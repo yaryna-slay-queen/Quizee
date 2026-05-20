@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizzee</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/mainpage.css">
+</head>
+<body>
+    <div class="wrapper">
+        <img src="/image.png" alt="icon" class="header-icon">
+        <h1>Quizzee</h1>
+        <a href="/logout" class="btn-link">Logout</a>
+
+        {{#if showScore}}
+        <div class="results-card">
+            <div class="resuls-tip">
+            <h2>Результат</h2></div>
+            <p style="font-size:2rem; font-weight:900; color:var(--accent-color); margin:20px 0;">
+                {{score}} / {{total}}
+            </p>
+            <p>{{#if (eq score total)}}Exellent! Everything is correct{{else}}Next time you'll be better!{{/if}}</p>
+            <a href="/polls/{{quizId}}/answer" class="btn btn-edit" style="margin-top:16px; display:inline-block;">Try again</a>
+            <a href="/polls" class="btn-back" style="margin-top:12px;">Go back</a>
+        </div>
+
+        {{else}}
+        <form method="POST" action="/polls/{{quiz.id}}/answer" class="quiz-form-wrapper">
+
+            <div class="form-card question-block" style="margin-bottom:8px;">
+                <div class="results-test-name">
+                <h2>{{quiz.title}}</h2></div>
+            </div>
+
+            {{#each quiz.polls}}
+            <div class="form-card question-block">
+                <div class="question-number">Question {{add @index 1}}</div>
+
+                <div class="form-group">
+                    <label style="font-size:1rem; font-weight:600; color:var(--text-color); text-transform:none;">
+                        {{this.question_text}}
+                    </label>
+                </div>
+
+                {{#if (eq this.type 'text')}}
+                    <input type="text" name="answer_text_{{@index}}" class="form-control"
+                        placeholder="Your answer..." style="margin-top:10px;">
+
+                {{else if (eq this.type 'single')}}
+                    <div class="options-container" style="margin-top:10px;">
+                        {{#each this.options}}
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">
+                                    <input type="radio" name="answer_{{@../index}}" value="{{@index}}">
+                                </div>
+                                <div class="form-control" style="display:flex; align-items:center;">
+                                    {{this.option_text}}
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                {{else if (eq this.type 'multiple')}}
+                    <div class="options-container" style="margin-top:10px;">
+                        {{#each this.options}}
+                            <div class="input-group mb-2">
+                                <div class="input-group-text">
+                                    <input type="checkbox" name="answer_{{@../index}}[]" value="{{@index}}">
+                                </div>
+                                <div class="form-control" style="display:flex; align-items:center;">
+                                    {{this.option_text}}
+                                </div>
+                            </div>
+                        {{/each}}
+                    </div>
+                {{/if}}
+            </div>
+            {{/each}}
+
+            <button type="submit" class="btn btn-new btn-submit-form">
+                Send answer
+            </button>
+            <a href="/polls" class="btn-back">Go back</a>
+        </form>
+        {{/if}}
+
+    </div>
+</body>
+</html>

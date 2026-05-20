@@ -1,0 +1,449 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+:root {
+    --accent-color: rgb(85, 42, 0);
+    --base-color: rgb(199, 160, 107);
+    --text-color: black;
+    --input-color: rgb(252, 221, 177);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-family: Poppins, Segoe UI, sans-serif;
+    font-size: 12pt;
+    color: var(--text-color);
+    text-align: center;
+}
+
+body {
+    min-height: 100vh;
+    background-image: url(background.jpg);
+    background-size: cover;
+    background-position: right;
+    overflow-x: hidden;
+}
+
+.wrapper {
+    box-sizing: border-box;
+    background-color: var(--base-color);
+    min-height: 100vh;
+    width: max(55%);
+    padding: 10px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin: 0 auto;
+}
+
+.header-icon {
+    margin-top: 50px;
+    margin-left: 50px;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-left: 110px;
+    margin-top: -65px;
+    margin-bottom: 50px;
+}
+
+.btn-link {
+    align-self: flex-end;
+    text-decoration: none;
+    color: var(--accent-color);
+    margin-right: 50px;
+    margin-top: -100px;
+}
+.btn-link:hover { text-decoration: underline; }
+
+h2 {
+    font-size: 1.1rem;
+    font-weight: 1500;
+    text-transform: uppercase;
+    margin-left: -410px;
+    margin-bottom: -30px;
+}
+
+p {
+    font-size: 0.75rem;
+    color: var(--accent-color);
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+/* ── TABS ── */
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    margin-left: 59px;
+    flex-wrap: wrap;
+}
+
+.tabs a {
+    padding: 8px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    background: var(--input-color);
+    color: var(--accent-color);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    transition: 150ms ease;
+}
+
+.tabs a:hover { background: var(--accent-color); color: var(--base-color); }
+.tabs a.active { background: var(--accent-color); color: var(--base-color); }
+
+/* ── POLL CARDS (список) ── */
+.polls {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 80%;
+    margin-bottom: 20px;
+    margin-left: 60px;
+}
+
+.poll-card {
+    background: var(--input-color);
+    border-radius: 14px;
+    padding: 20px 26px;
+    border-left: 6px solid var(--accent-color);
+    width: 100%;
+}
+
+.poll-meta {
+    font-size: 0.8rem;
+    color: var(--accent-color);
+    margin-top: 30px;
+    margin-right: 370px;
+}
+
+/* ── BADGES ── */
+.badge {
+    display: inline-block;
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-right: 430px;
+    margin-bottom: 4px;
+    margin-top: 4px;
+}
+
+.badge-count {
+    background: var(--accent-color);
+    color: var(--base-color);
+}
+
+/* ── BUTTONS ── */
+.btn {
+    padding: 7px 18px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-decoration: none;
+    display: inline-block;
+    transition: 150ms ease;
+}
+
+.btn-new {
+    background: var(--accent-color);
+    color: var(--base-color);
+    margin-top: 55px;
+    margin-bottom: 10px;
+    margin-left: 58px;
+    padding: 10px 24px;
+}
+.btn-new:hover { background: black; }
+
+.btn-edit { background: var(--accent-color); color: var(--base-color); }
+.btn-edit:hover { background: black; }
+
+.btn-delete { background: rgb(160, 40, 30); color: var(--input-color); }
+.btn-delete:hover { background: black; }
+
+.btn-results {
+    background: var(--input-color);
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+}
+.btn-results:hover { background: var(--accent-color); color: var(--base-color); }
+
+.btn-submit-answer { background: var(--accent-color); color: var(--base-color); }
+.btn-submit-answer:hover { background: black; }
+
+/* ── POLL ACTIONS ── */
+.poll-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+/* ══════════════════════════════
+   QUIZ FORM WRAPPER
+══════════════════════════════ */
+.quiz-form-wrapper {
+    width: 80%;
+    margin-left: 60px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
+}
+
+/* ── РОЗДІЛЬНИК між назвою тесту і першим питанням ── */
+.question-divider {
+    width: 100%;
+    height: 2px;
+    background: var(--accent-color);
+    opacity: 0.25;
+    border-radius: 2px;
+    margin: 20px 0 16px 0;
+}
+
+/* ── БЛОК ПИТАННЯ ── */
+.form-card.question-block {
+    background: var(--input-color);
+    border-radius: 18px;
+    border: 3px solid var(--accent-color);
+    padding: 24px 28px;
+    box-shadow: 0 4px 20px rgba(85, 42, 0, 0.12);
+    position: relative;
+}
+
+/* Номер питання */
+.question-number {
+    font-size: 0.75rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--base-color);
+    background: var(--accent-color);
+    display: inline-block;
+    padding: 3px 14px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+}
+
+/* Кнопка видалити питання */
+.btn-remove-question {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgb(160, 40, 30);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    transition: 150ms ease;
+}
+.btn-remove-question:hover { background: black; }
+
+/* ── КНОПКА ДОДАТИ ПИТАННЯ ── */
+.btn-add-question {
+    background: transparent;
+    color: var(--accent-color);
+    border: 2.5px dashed var(--accent-color);
+    border-radius: 14px;
+    padding: 14px;
+    width: 100%;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 150ms ease;
+    letter-spacing: 0.04em;
+}
+.btn-add-question:hover {
+    background: var(--accent-color);
+    color: var(--base-color);
+    border-style: solid;
+}
+
+/* ── FORM GROUPS всередині питань ── */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    width: 100%;
+}
+
+.question-block label,
+.form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    margin-top: 14px;
+    margin-left: 0;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: none;
+    background: var(--base-color);
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+.form-control:focus { outline: 2px solid var(--accent-color); }
+
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-align: left;
+    margin-top: 14px;
+}
+
+.form-check-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    margin: 0 !important;
+}
+
+.form-check-input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.options-container {
+    text-align: left;
+    margin-top: 4px;
+}
+
+.options-container label {
+    margin-top: 14px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: 4px 8px;
+    background: var(--base-color);
+    border-radius: 8px;
+}
+
+.status-group { margin-top: 4px; }
+
+.btn-submit-form {
+    margin-top: 4px;
+    margin-left: 0;
+    width: 100%;
+    text-align: center;
+    border-radius: 10px;
+    padding: 14px;
+    font-size: 1rem;
+}
+
+/* ── ANSWER ITEMS ── */
+.answer-item {
+    padding: 10px 0;
+    border-bottom: 1px solid var(--base-color);
+    font-size: 0.92rem;
+}
+
+.answer-date {
+    font-size: 0.72rem;
+    color: var(--accent-color);
+    margin-top: 3px;
+}
+
+/* ── RESULTS CARD ── */
+.results-card {
+    width: 80%;
+    margin-left: 60px;
+    margin-top: 50px;
+    background: var(--input-color);
+    border-radius: 18px;
+    border: 3px solid var(--accent-color);
+    padding: 28px 32px;
+    text-align: left;
+    box-shadow: 0 4px 24px rgba(85, 42, 0, 0.15);
+}
+
+.resuls-tip{
+    margin-left: 400px;
+    margin-bottom: 40px;
+}
+
+.results-test-name{
+    margin-left: 410px;
+    margin-top: -12px;
+}
+
+.no-answers{
+    margin-left: 210px;
+}
+
+/* ── BACK LINK ── */
+.btn-back {
+    display: inline-block;
+    margin-top: 8px;
+    color: var(--accent-color);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+}
+.btn-back:hover { text-decoration: underline; }
+
+/* ── SECONDARY BTN (додати варіант) ── */
+.btn-secondary {
+    background: var(--base-color);
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+    margin-top: 6px;
+    font-size: 0.78rem;
+    padding: 5px 14px;
+}
+.btn-secondary:hover { background: var(--accent-color); color: var(--base-color); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 1100px) {
+    .wrapper { width: min(600px, 100%); border-radius: 0; }
+    .quiz-form-wrapper { width: 90%; margin-left: auto; margin-right: auto; }
+    .polls { width: 90%; margin-left: auto; }
+}

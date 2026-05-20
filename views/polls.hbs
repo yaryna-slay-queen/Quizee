@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Quizee</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="stylesheet" href="/mainpage.css">
+</head>
+<body>
+    <div class="wrapper">
+        <img src="/image.png" alt="icon" class="header-icon">
+        <h1>Quizzee</h1>
+        <a href="/logout" class="btn-link">Logout</a>
+        {{#if showList}}
+        <a href="/polls/new" class="btn btn-new">+ create quiz</a>
+        <div class="tabs">
+            <a href="/polls?status=active"   class="{{#if (eq currentStatus 'active')}}active{{/if}}">Active</a>
+            <a href="/polls?status=draft"    class="{{#if (eq currentStatus 'draft')}}active{{/if}}">Draft</a>
+            <a href="/polls?status=achieved" class="{{#if (eq currentStatus 'achieved')}}active{{/if}}">Achieved quizzes</a>
+        </div>
+
+        <div class="polls">
+            {{#each polls}}
+                <div class="poll-card {{status}}">
+                    <h2>{{title}}</h2>
+                    <div class="poll-meta">created at: {{created_at}}</div>
+                    <div class="poll-actions">
+                        {{#unless (eq status 'achieved')}}
+                            <a href="/polls/edit/{{id}}" class="btn btn-edit">Edit</a>
+                        {{/unless}}
+                        <a href="/polls/{{id}}/results" class="btn btn-results">Results</a>
+                        {{#if (eq status 'active')}}
+                            <a href="/polls/{{id}}/answer" class="btn btn-edit">Answer</a>
+                        {{/if}}
+                        <button class="btn btn-delete" onclick="deletePoll({{id}})">Delete</button>
+                    </div>
+                </div>
+            {{else}}
+                <p>No quizzes yet.</p>
+            {{/each}}
+        </div>
+        {{/if}}
+
+        {{#if showForm}}
+        <form method="POST" action="{{#if editingPoll}}/polls/edit/{{editingPoll.id}}{{else}}/polls{{/if}}" class="quiz-form-wrapper">
+
+            <div id="questionsContainer">
+
+                <div class="form-card question-block">
+
+                    <div class="form-group">
+                        <label>Quiz name:</label>
+                        <input type="text" name="title" class="form-control"
+                            placeholder="Input quiz name..."
+                            value="{{editingPoll.title}}">
+                    </div>
+
+                    <div class="form-group status-group">
+                        <label>Status</label>
+                        <select name="status" class="form-control">
+                            <option value="draft"    {{#if (eq editingPoll.status 'draft')}}selected{{/if}}>Draft</option>
+                            <option value="active"   {{#if (eq editingPoll.status 'active')}}selected{{/if}}>Active</option>
+                            <option value="achieved" {{#if (eq editingPoll.status 'achieved')}}selected{{/if}}>Achieved</option>
+                        </select>
+                    </div>
+
+                    <div class="question-divider"></div>
+                    <div class="question-number">Question 1</div>
+
+                    <div class="form-group">
+                        <label>Question text:</label>
+                        <input type="text" data-field="question_text" name="question_text" class="form-control" placeholder="Input question text..."
+                            value="{{editingPoll.polls.[0].question_text}}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Question type:</label>
+                        <select data-field="type" name="type" id="type" class="form-control" onchange="toggleOptions()">
+                            <option value="text"     {{#if (eq editingPoll.polls.[0].type 'text')}}selected{{/if}}>text</option>
+                            <option value="single"   {{#if (eq editingPoll.polls.[0].type 'single')}}selected{{/if}}>single choice</option>
+                            <option value="multiple" {{#if (eq editingPoll.polls.[0].type 'multiple')}}selected{{/if}}>multiple choice</option>
+                        </select>
+                    </div>
+
+                    <div id="optionsContainer" {{#if (eq editingPoll.polls.[0].type 'text')}}style="display:none;"{{/if}}>
+                        <label>Options:</label>
+                        <div id="optionsList">
+                            {{#if editingPoll.polls.[0].options}}
+                                {{#each editingPoll.polls.[0].options}}
+                                    <div class="input-group mb-2">
+                                        <div class="input-group-text">
+                                            <input class="correct-option-input"
+                                                data-field="correct_option"
+                                                type="checkbox"
+                                                value="{{@index}}"
+                                                {{#if this.is_correct}}checked{{/if}}>
+                                        </div>
+                                        <input type="text" data-field="option" value="{{this.option_text}}" class="form-control">
+                                    </div>
+                                {{/each}}
+                            {{else}}
+                                <div class="input-group mb-2">
+                                    <div class="input-group-text">
+                                        <input class="correct-option-input" data-field="correct_option" type="checkbox" value="0">
+                                    </div>
+                                    <input type="text" data-field="option" class="form-control" placeholder="Option 1">
+                                </div>
+                            {{/if}}
+                        </div>
+                        <button type="button" onclick="addOptionField()" class="btn btn-sm btn-secondary">+ Add option</button>
+                    </div>
+
+                    <div id="textAnswerContainer" {{#unless (eq editingPoll.polls.[0].type 'text')}}style="display:none;"{{/unless}}>
+                        <label>Correct answer:</label>
+                        <input type="text" name="correct_text_0" class="form-control" placeholder="Input correct answer..." value="{{editingPoll.polls.[0].correct_text}}">
+                    </div>
+
+                </div>
+
+                {{#if editingPoll}}
+                    {{#each editingPoll.polls}}
+                        {{#if @index}}
+                            <div class="form-card question-block">
+                                <button type="button" class="btn-remove-question" onclick="removeQuestion(this)" title="Delete question">✕</button>
+                                <div class="question-number">Question {{add @index 1}}</div>
+
+                                <div class="form-group">
+                                    <label>Question text:</label>
+                                    <input type="text" data-field="question_text" name="question_text" class="form-control"
+                                        value="{{this.question_text}}" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Question type:</label>
+                                    <select data-field="type" name="type" class="form-control extra-type-select" onchange="toggleExtraOptions(this)">
+                                        <option value="text"     {{#if (eq this.type 'text')}}selected{{/if}}>text</option>
+                                        <option value="single"   {{#if (eq this.type 'single')}}selected{{/if}}>single choice</option>
+                                        <option value="multiple" {{#if (eq this.type 'multiple')}}selected{{/if}}>multiple choice</option>
+                                    </select>
+                                </div>
+
+                                <div class="extra-options-container" {{#if (eq this.type 'text')}}style="display:none;"{{/if}}>
+                                    <label>Options:</label>
+                                    <div class="extra-options-list">
+                                        {{#each this.options}}
+                                            <div class="input-group mb-2">
+                                                <div class="input-group-text">
+                                                    <input class="correct-option-input"
+                                                        data-field="correct_option"
+                                                        type="checkbox"
+                                                        value="{{@index}}"
+                                                        {{#if this.is_correct}}checked{{/if}}>
+                                                </div>
+                                                <input type="text" data-field="option" value="{{this.option_text}}" class="form-control">
+                                            </div>
+                                        {{/each}}
+                                    </div>
+                                    <button type="button" onclick="addExtraOptionField(this)" class="btn btn-sm btn-secondary">+ Add option</button>
+                                </div>
+
+                                <div class="extra-text-container" {{#unless (eq this.type 'text')}}style="display:none;"{{/unless}}>
+                                    <label>Correct answer:</label>
+                                    <input type="text" name="correct_text" class="form-control" placeholder="Input correct answer..." value="{{this.correct_text}}">
+                                </div>
+                            </div>
+                        {{/if}}
+                    {{/each}}
+                {{/if}}
+            </div>
+
+            <button type="button" class="btn btn-add-question" onclick="addQuestion()">
+                + Add question
+            </button>
+
+            <button type="submit" class="btn btn-new btn-submit-form">
+                {{#if editingPoll}}Save changes{{else}}Create question{{/if}}
+            </button>
+
+            <a href="/polls" class="btn-back">Go back</a>
+
+            {{#if editingPoll}}
+            <script>
+                window.EDITING_POLL = {{{json editingPoll}}};
+            </script>
+            {{/if}}
+        </form>
+        {{/if}}
+
+        {{#if showResults}}
+            <div class="results-card">
+                <div class="results-test-name"><h2>Results: {{quiz.title}}</h2></div>
+                <div class="poll-meta">All attempts: {{attempts.length}}</div>
+                <div style="margin-top:20px;">
+                    {{#each attempts}}
+                        <div class="answer-item">
+                            <div class="attempt-score">
+                                Score: <strong>{{score}} / {{total}}</strong>
+                            </div>
+                            <div class="answer-date">Answered at: {{submitted_at}}</div>
+                        </div>
+                    {{else}}
+                        <div class="no-answers">
+                            <p>No answers yet.</p>
+                        </div>
+                    {{/each}}
+                </div>
+                <a href="/polls" class="btn-back">Back up to quizzes</a>
+            </div>
+        {{/if}}
+
+        <script src="/polls_client.js"></script>
+    <script>
+    const params = new URLSearchParams(window.location.search);
+    const greeting = params.get("greeting");
+    const name = params.get("name") || localStorage.getItem('firstname') || '';
+    if (greeting === "welcome") alert("Welcome, " + name + "!");
+    else if (greeting === "welcomeBack") alert("Welcome back, " + name + "!");
+    </script>
+    </div>
+</body>
+</html>

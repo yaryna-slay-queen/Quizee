@@ -69,8 +69,6 @@ Quizee is a platform for creating and taking quizzes. Create a quiz, name it, ma
    PORT=3000
    ```
 
-   > ⚠️ `.env` contains sensitive credentials — make sure it's listed in `.gitignore` and never committed to the repository.
-
 4. **Start the app**
 
    ```bash
